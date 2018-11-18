@@ -1,0 +1,41 @@
+[
+    {
+        "Name": "Unilibdev",
+        "Url": "http://os4depot.net/share/library/misc/unilibdev.lha",
+        "SdkInstall": 
+        [
+            { "From": "UniLibDev/include/amigaos4/inline4/uni.h",    "To": "include/include_h/inline4/uni.h"},
+            { "From": "UniLibDev/include/amigaos4/interfaces/uni.h", "To": "include/include_h/interfaces/uni.h"},
+            { "From": "UniLibDev/include/proto/*",              "To": "include/include_h/proto"},
+            { "From": "UniLibDev/include/clib/*",                      "To": "include/include_h/clib"},
+            { "From": "UniLibDev/include/libraries/*",                 "To": "include/include_h/libraries"}
+        ]
+    },
+    {
+        "Name": "Expat",
+        "Url": "http://os4depot.net/share/development/library/misc/expat.lha",
+        "SdkInstall":
+        [
+            { "From": "*/SDK/Documentation/*", "To": "Documentation"},
+            { "From": "*/SDK/Local/*", "To": "local"},
+            { "From": "*/SDK/Include/*", "To": "include"}
+        ]
+    },
+    {
+        "Name": "Codesets",
+        "Url": "http://os4depot.net/share/library/misc/codesets.lha",
+        "SdkInstall":
+        [
+            { "From": "codesets/Developer/Autodocs/*", "To": "Documentation"},
+            { "From": "codesets/Developer/include/*", "To": "include/include_h"}
+        ]
+    },
+    {
+        "Name": "LibZ",
+        "Url": "http://os4depot.net/share/development/library/misc/libz.lha",
+        "SdkInstall":
+  	[	
+	    {"From": "Zlib/SDK/Local/*", "To": "local"}  
+	]
+    }
+]
