@@ -19,3 +19,4 @@ RUN chmod +x /usr/sbin/install-sdk-dependency.py
 COPY support-files/sbin/build.py /usr/sbin/ade-build.py
 RUN chmod +x /usr/sbin/ade-build.py
 
+WORKDIR ./workdir
