@@ -16,8 +16,8 @@ RUN apt-get --assume-yes install subversion git make
 ADD https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/conf/dependencies.json?format=raw /etc/amiga-dependencies.json
 RUN chmod +r /etc/amiga-dependencies.json
 
-# COPY support-files/sbin/install-sdk-dependency.py /usr/sbin/install-sdk-dependency.py
-ADD https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/sbin/install-sdk-dependency.py?format=raw /usr/sbin/install-sdk-dependency.py
+COPY support-files/sbin/install-sdk-dependency.py /usr/sbin/install-sdk-dependency.py
+## ADD https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/sbin/install-sdk-dependency.py?format=raw /usr/sbin/install-sdk-dependency.py
 RUN chmod +x /usr/sbin/install-sdk-dependency.py
 
 # COPY support-files/sbin/build.py /usr/sbin/ade-build.py
