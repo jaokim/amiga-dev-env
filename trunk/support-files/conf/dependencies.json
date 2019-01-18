@@ -37,5 +37,63 @@
   	[	
 	    {"From": "Zlib/SDK/Local/*", "To": "local"}  
 	]
+    },
+    {
+	"Name": "PThreads 2005",
+	"Url":"http://os4depot.net/share/development/library/misc/pthreads.lha",
+        "SdkInstall": [
+            { "From": "SDK/*",    "To": ""}
+        ]
+        
+    },
+    {
+        "Url": "http://os4depot.net/share/development/misc/libffmpeg.lha",
+        "SdkInstall": [
+            { "From": "SDK/*",    "To": ""}
+        ]
+ 
+    },
+    {
+        "Url":"http://os4depot.net/share/development/library/misc/liblzo.lha",
+        "SdkInstall": [
+            { "From": "liblzo-2.08/SDK/*",    "To": ""}
+        ]
+    },
+    {
+        "Url": "http://os4depot.net/share/development/library/graphics/libjpeg.lha",
+        "SdkInstall": [
+            { "From": "SDK/Local/*",    "To": "local/"}
+        ]
+    },
+    {
+        "Url": "http://os4depot.net/share/development/library/graphics/libpng.lha",
+        "SdkInstall": [
+            { "From": "Local/*",    "To": "local/"}
+        ]
+    },
+    {
+        "Url": "http://os4depot.net/share/library/misc/sdl2.lha",
+        "SdkInstall": [
+            { "From": "SDL2/SDK/*",    "To": ""}
+        ]
+    },
+    {
+        "Url":"http://os4depot.net/share/development/library/misc/libopenssl.lha",
+        "SdkInstall": [
+            { "From": "libOpenSSL/SDK/*",    "To": ""}
+        ]
+    },
+    {
+        "Url":"https://github.com/jaokim/aros-stuff/releases/download/1.0/pthreads.lha",
+        "SdkInstall": [
+            { "From": "SDK/*",    "To": ""}
+        ]        
+    },
+    {
+        "Url":"http://os4depot.net/share/development/library/misc/libicu.lha",
+        "SdkInstall": [
+            { "From": "SDK/Local",    "To": "local/"}
+        ]
+
     }
 ]
