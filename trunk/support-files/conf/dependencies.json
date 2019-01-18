@@ -92,7 +92,7 @@
     {
         "Url":"http://os4depot.net/share/development/library/misc/libicu.lha",
         "SdkInstall": [
-            { "From": "SDK/Local",    "To": "local/"}
+            { "From": "SDK/Local/*",    "To": "local/"}
         ]
 
     }
