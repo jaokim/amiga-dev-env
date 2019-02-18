@@ -95,5 +95,11 @@
             { "From": "SDK/Local/*",    "To": "local/"}
         ]
 
+    },
+    {
+        "Url": "http://os4depot.net/share/development/library/graphics/cairo.lha",
+        "SdkInstall": [
+            { "From": "Cairo/local/*",    "To": "local/"}
+        ]
     }
 ]
