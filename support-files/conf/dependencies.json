@@ -68,7 +68,8 @@
     {
         "Url": "http://os4depot.net/share/development/library/graphics/libpng.lha",
         "SdkInstall": [
-            { "From": "Local/*",    "To": "local/"}
+            { "From": "Local/*",    "To": "local/"},
+            { "From": "Local/newlib/lib/libpng16.so.16.34.0",    "To": "local/newlib/lib/libpng16.so"}
         ]
     },
     {
@@ -101,5 +102,63 @@
         "SdkInstall": [
             { "From": "Cairo/local/*",    "To": "local/"}
         ]
+    },
+    {
+	"Name": "FreeType",
+	"Url":"http://os4depot.net/share/development/library/graphics/libfreetype.lha",
+        "SdkInstall": [
+            { "From": "Freetype2/SDK/Local/*",    "To": "local/"},
+            { "From": "Freetype2/SDK/Local/newlib/lib/libfreetype.so.21",    "To": "local/newlib/lib/libfreetype.so"}
+        ]
+        
+    },
+    {
+	"Name": "libcairo",
+	"Url":"http://os4depot.net/share/library/graphics/pixman_lib.lha",
+        "SdkInstall": [
+            { "From": "pixman_lib-53.4/SDK/local/*",    "To": "local/"}
+        ]
+        
+    },
+    {
+	"Name": "libxml2",
+	"Url":"http://os4depot.net/share/library/xml/libxml2.lha",
+        "SdkInstall": [
+            { "From": "SDK/local/*",    "To": "local/"}
+        ]
+        
+    },
+    {
+	"Name": "sqlite",
+	"Url":"http://os4depot.net/share/development/library/misc/sqlite.lha",
+        "SdkInstall": [
+            { "From": "SDK/local/*",    "To": "local/"}
+        ]
+        
+    },
+    {
+	"Name": "libcurl",
+	"Url":"http://os4depot.net/share/development/library/misc/libcurl.lha",
+        "SdkInstall": [
+            { "From": "SDK/Local/*",    "To": "local/"}
+        ]
+        
+    },
+    {
+	"Name": "MUI5",
+	"Url":"https://muidev.de/download/MUI%205.0%20-%20Release/MUI-5.0-2018R4-os4.lha",
+        "SdkInstall": [
+            { "From": "SDK/*",    "To": ""}
+        ]
+        
+    },
+    {
+	"Name": "libdl",
+	"Url":"http://os4depot.net/share/development/library/misc/libdl.lha",
+        "SdkInstall": [
+            { "From": "libdl/libdl.a",    "To": "local/newlib/lib/"},
+            { "From": "libdl/dlfcn.h",    "To": "local/newlib/include/"}
+        ]
+        
     }
 ]
