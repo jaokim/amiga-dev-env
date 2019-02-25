@@ -10,7 +10,7 @@
 # ]
 # The JSON file can be expanded with SdkInstall instructions as below.
 #
-# $ver 1.2 (2019-01-19)
+# $ver 1.3 (2019-02-20)
 # 
 # Author: Joakim Nordstrom
 #
@@ -27,6 +27,8 @@ from subprocess import call
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument('dependencies', metavar='dep', type=string, nargs='+',
+                    help='an integer for the accumulator')
 parser.add_argument('-f','--file', default="./dependencies.json")
 parser.add_argument('-d', '--dependencies', nargs='*')
 parser.add_argument('--test', help='only test what would happen', action="store_true")
