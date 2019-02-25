@@ -36,7 +36,7 @@ from subprocess import call
 # SDK location -- always end with slash
 SDK_LOCATION = os.getenv('DEPGET_SDK_LOCATION', "/SDK/");
 GLOBAL_DEPENDENCIES_FILE = os.getenv('DEPGET_GLOBAL_DEPENDENCIES_FILE', "/etc/amiga-dependencies.json");
-GLOBAL_DEPENDENCIES_URL = "https://sourceforge.net/p/vagrant-amigaos4-crosscompiler/code/HEAD/tree/trunk/support-files/conf/dependencies.json?format=raw"
+GLOBAL_DEPENDENCIES_URL = "https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/conf/dependencies.json?format=raw"
 
 parser = argparse.ArgumentParser(
      description='Install SDK dependencies',
