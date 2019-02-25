@@ -160,5 +160,20 @@
             { "From": "libdl/dlfcn.h",    "To": "local/newlib/include/"}
         ]
         
+    },
+    {
+        "Name": "libcairo-1.14.10",
+        "Url": "https://downloads.sourceforge.net/project/odyssey-os4-dependencies/cairo_lib-1.14.10.tar?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fodyssey-os4-dependencies%2Ffiles%2Fcairo_lib-1.14.10.tar%2Fdownload%3Fuse_mirror%3Dautoselect&ts=1551134941&use_mirror=autoselect",
+        "SdkInstall": [
+            {"From": "cairo_lib/cairo_lib-1.14.10/SDK/local/*", "To": "local/"}
+        ]
+    },
+    {
+	"Name": "libxslt-1.1.30",
+	"Url":"https://downloads.sourceforge.net/project/odyssey-os4-dependencies/libxslt-1.1.30.tar?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fodyssey-os4-dependencies%2Ffiles%2Flibxslt-1.1.30.tar%2Fdownload&ts=1551134852&use_mirror=netcologne",
+        "SdkInstall": [
+            { "From": "SDK/local/*",    "To": "local/"}
+        ]
+        
     }
 ]
