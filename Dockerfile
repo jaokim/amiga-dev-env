@@ -19,17 +19,10 @@ RUN ln /usr/bin/ppc-amigaos-addr2line /usr/bin/addr2line && ln /usr/bin/ppc-amig
 RUN ln /usr/ppc-amigaos/SDK/ /SDK -s
 
 COPY support-files/conf/dependencies.json /etc/amiga-dependencies.json
-## ADD https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/conf/dependencies.json?format=raw /etc/amiga-dependencies.json
 RUN chmod +r /etc/amiga-dependencies.json
 
 COPY support-files/sbin/dep-get.py /usr/sbin/dep-get.py
-## ADD https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/sbin/install-sdk-dependency.py?format=raw /usr/sbin/install-sdk-dependency.py
 RUN chmod +x /usr/sbin/dep-get.py
 
 
-# RUN apt-get --assume-yes install subversion git make
-# COPY support-files/sbin/build.py /usr/sbin/ade-build.py
-# ADD https://sourceforge.net/p/docker-ade/code/HEAD/tree/trunk/support-files/sbin/build.py /usr/sbin/ade-build.py
-# RUN chmod +x /usr/sbin/ade-build.py
-
-WORKDIR ./workdir
+WORKDIR /workdir
