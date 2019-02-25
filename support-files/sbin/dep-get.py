@@ -74,6 +74,7 @@ else:
 	COPY_COMMAND = "cp -rp {install_from} {install_to}";
 UNPACK_CMD = {}
 UNPACK_CMD['lha'] = "lha xw={tempdir} {archive}"
+UNPACK_CMD['tar'] = "tar -xvf {archive} {tempdir}"
 CHMOD_CMD = "chmod -R a+r {tempdir}"
 				
 #+tempdir+"/"+instruction['From']+" "+SDK_LOCATION+instruction['To'];
