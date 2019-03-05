@@ -26,7 +26,10 @@
 import sys
 import json
 import tempfile
-import urllib
+#import urllib
+#import shutil
+#import urllib.request
+#import requests
 import argparse
 import os.path
 import re
@@ -45,6 +48,7 @@ dep-get uses a JSON file which contains install instructions for archives with S
  [
    {
      "Url": "http://os4depot.net/share/library/misc/superduperlib.lha",
+     "ArchiveType": "lha"
      "SdkInstall": 
         [
             { "From": "SuperDuper/Dev/include/amigaos4/inline4/superduper.h",    "To": "include/include_h/inline4/superduper.h"},
@@ -53,7 +57,7 @@ dep-get uses a JSON file which contains install instructions for archives with S
    }
  ]
 Examples:
-  dep-get --install libxml2 "pthreads 2005"       Install libxml2, libicu, and Pthreads		
+  dep-get --install libxml2 "pthreads 2005"       Install libxml2, libicu, and Pthreads        
   dep-get --search icu                            Search for dependency "icu"
   dep-get -f myown-dependecies.json               Install dependecies listed in the JSON file
 ''')
@@ -68,82 +72,100 @@ parser.add_argument('--silent', help='be silent', action="store_true")
 
 args = parser.parse_args()
 
+
 if args.verbose:
-	COPY_COMMAND = "cp --verbose -rp {install_from} {install_to}";
+    COPY_COMMAND = "cp --verbose -rp {install_from} {install_to}";
 else: 
-	COPY_COMMAND = "cp -rp {install_from} {install_to}";
+    COPY_COMMAND = "cp -rp {install_from} {install_to}";
 UNPACK_CMD = {}
 UNPACK_CMD['lha'] = "lha xw={tempdir} {archive}"
-UNPACK_CMD['tar'] = "tar -xvf {archive} {tempdir}"
+UNPACK_CMD['tar'] = "tar -C {tempdir} -xvf {archive}"
 CHMOD_CMD = "chmod -R a+r {tempdir}"
-				
+DL_CMD = "wget {url} -O{destinationfile}"
+                
 #+tempdir+"/"+instruction['From']+" "+SDK_LOCATION+instruction['To'];
+
+#######################################################################
+# Download file
+#######################################################################
+def download_file(url, destinationfile):
+    #with urllib.request.urlopen(url) as response:
+    #    shutil.copyfileobj(response, destinationfile)
+    download_cmd = DL_CMD.format(url=url, destinationfile=destinationfile)
+    call(download_cmd, shell=True)
+    #r = requests.get(url, allow_redirects=True)
+    #open(destinationfile, 'wb').write(r.content)        
+    #urllib.request.FancyURLOpener().retrieve(url, filename=destinationfile)
+    #urllib.urlretrieve(GLOBAL_DEPENDENCIES_URL, GLOBAL_DEPENDENCIES_FILE)
+    #r = urllib.urlopen(url)
+    #open(destinationfile, 'wb').write(r.read())        
+
 
 #######################################################################
 # Update dependencies files
 #######################################################################
 if args.update:
-	if not args.silent : 
-		print("Updating dependencies file from: "+GLOBAL_DEPENDENCIES_URL)
+    if not args.silent : 
+        print("Updating dependencies file from: "+GLOBAL_DEPENDENCIES_URL)
 
-	if args.test:
-		print("Downloading from {}, storing to: {}".format(GLOBAL_DEPENDENCIES_URL, GLOBAL_DEPENDENCIES_FILE))
-	else:
-		urllib.urlretrieve(GLOBAL_DEPENDENCIES_URL, GLOBAL_DEPENDENCIES_FILE)
-		
-	sys.exit(0)
+    if args.test:
+        print("Downloading from {}, storing to: {}".format(GLOBAL_DEPENDENCIES_URL, GLOBAL_DEPENDENCIES_FILE))
+    else:
+        download_file(GLOBAL_DEPENDENCIES_URL, GLOBAL_DEPENDENCIES_FILE)
+        
+    sys.exit(0)
 
 
 # Open default dependencies files. If the "local" dependency file doesnt contain
 # an SdkInstall instructions, the global will be used.
 if os.path.isfile(GLOBAL_DEPENDENCIES_FILE):
-	with open(GLOBAL_DEPENDENCIES_FILE, 'r') as f:
-		global_deps_dict = json.load(f)
+    with open(GLOBAL_DEPENDENCIES_FILE, 'r') as f:
+        global_deps_dict = json.load(f)
 else:
-	if not args.silent:
-		print("Global dependencies file couldn't be opened: {}", GLOBAL_DEPENDENCIES_FILE)
-	global_deps_dict = {}
+    if not args.silent:
+        print("Global dependencies file couldn't be opened: {}", GLOBAL_DEPENDENCIES_FILE)
+    global_deps_dict = {}
 
 nothingFound = True
-found = False;	
+found = False;    
 
 #######################################################################
 # Search
 #######################################################################
 if args.search:
-	for global_dep in global_deps_dict:
- 		name = ""
-		url = ""
-		if "Url" in global_dep:
-			url = global_dep["Url"]
-		else: 
-			continue
+    for global_dep in global_deps_dict:
+        name = ""
+        url = ""
+        if "Url" in global_dep:
+            url = global_dep["Url"]
+        else: 
+            continue
 
-		if "Name" in global_dep:
-			name = global_dep["Name"]
-		else:
-			idx = url.rfind("/")
-			if idx <> -1:
-				name = url[idx+1:len(url)]
+        if "Name" in global_dep:
+            name = global_dep["Name"]
+        else:
+            idx = url.rfind("/")
+            if idx != -1:
+                name = url[idx+1:len(url)]
 
-		if url.lower() == args.search.lower():
-			found = True;
-		elif re.match(".*"+args.search.lower()+".*$", url.lower()):
-			found = True;
-		elif re.match(args.search.lower(), name.lower()):
-			found = True;
-		elif args.verbose :
-			print("Doesnt match: "+name + " " + global_dep["Url"])
+        if url.lower() == args.search.lower():
+            found = True;
+        elif re.match(".*"+args.search.lower()+".*$", url.lower()):
+            found = True;
+        elif re.match(args.search.lower(), name.lower()):
+            found = True;
+        elif args.verbose :
+            print("Doesnt match: "+name + " " + global_dep["Url"])
 
-		if found : 
-			print(name.ljust(32)+" "+url)
-			nothingFound = False
-		found = False;
-	if nothingFound:
-		if not args.silent: 		
-			print("No archives found matching \""+args.search+"\".")
-		sys.exit(5)
-	sys.exit(0)
+        if found : 
+            print(name.ljust(32)+" "+url)
+            nothingFound = False
+        found = False;
+    if nothingFound:
+        if not args.silent:         
+            print("No archives found matching \""+args.search+"\".")
+        sys.exit(5)
+    sys.exit(0)
 
 #######################################################################
 # Open JSON file listing and describing download URL and installation procedure.
@@ -162,7 +184,7 @@ if args.search:
 # ]
 
 if args.file:
-	dependency_file = args.file
+    dependency_file = args.file
 
 #######################################################################
 # Read from already existing dep file, and then append stuff to it,
@@ -170,152 +192,165 @@ if args.file:
 #######################################################################
 local_dependency_file_content = []
 if args.generate_dep_file:
-	if os.path.isfile(dependency_file) and os.path.getsize(dependency_file) > 0:
-		with open(dependency_file, 'r') as f:
-			local_dependency_file_content = json.load(f)
-			if args.verbose:
-				print("Read {} dependencies from {}", len(local_dependency_file_content), dependency_file)
-	elif args.verbose:
-		print("No existing, or empty dependency file found {}, will create new", dependency_file)
+    if os.path.isfile(dependency_file) and os.path.getsize(dependency_file) > 0:
+        with open(dependency_file, 'r') as f:
+            local_dependency_file_content = json.load(f)
+            if args.verbose:
+                print("Read {} dependencies from {}", len(local_dependency_file_content), dependency_file)
+    elif args.verbose:
+        print("No existing, or empty dependency file found {}, will create new", dependency_file)
 
 #######################################################################
 # Install
 #######################################################################
 if args.install is not None:
-	failure = False
-	deps_to_install = []
-	# Install from dependency file
-	if len(args.install) == 0:
-		dependencies = []
-		if os.path.isfile(dependency_file) and os.path.getsize(dependency_file) > 0:
-			if args.verbose:
-				print("Loading dependencies from file {}".format(dependency_file))
-			with open(dependency_file, 'r') as f:
-				local_dep_file = json.load(f)
-				if args.verbose:
-					print("Found {} dependencies to possibly install".format(len(local_dep_file)))
-				for local_dep in local_dep_file:
-					# If we find the URL and isntall instructions in the local file,
-					# we can download and install, otherwise, we have to find it in global
-					if "Url" in local_dep and "SdkInstall" in local_dep:
-						deps_to_install.append(dep)
-					else:
-						for global_dep in global_deps_dict:
-							if ( ("Url" in global_dep and "Url" in local_dep and global_dep['Url'] == local_dep['Url']) or 
-									("Name" in global_dep and "Name" in local_dep and global_dep['Name'] == local_dep['Name']) ):
-								if "SdkInstall" in global_dep:
-									deps_to_install.append(global_dep)
-								else:
-									print("No SDK installation instruction found for: {}, {}".format(dependency, url))
-									failure = True
-							else: 
-								continue
-		elif args.verbose:
-			failure = True
-			print("Is not a file: {}".format(dependency_file))
-	# Install from command line list
-	else:
-	 	dependencies = args.install
+    failure = False
+    deps_to_install = []
+    # Install from dependency file
+    if len(args.install) == 0:
+        dependencies = []
+        if os.path.isfile(dependency_file) and os.path.getsize(dependency_file) > 0:
+            if args.verbose:
+                print("Loading dependencies from file {}".format(dependency_file))
+            with open(dependency_file, 'r') as f:
+                local_dep_file = json.load(f)
+                if args.verbose:
+                    print("Found {} dependencies to possibly install".format(len(local_dep_file)))
+                for local_dep in local_dep_file:
+                    # If we find the URL and isntall instructions in the local file,
+                    # we can download and install, otherwise, we have to find it in global
+                    if "Url" in local_dep and "SdkInstall" in local_dep:
+                        deps_to_install.append(dep)
+                    else:
+                        for global_dep in global_deps_dict:
+                            if ( ("Url" in global_dep and "Url" in local_dep and global_dep['Url'] == local_dep['Url']) or 
+                                    ("Name" in global_dep and "Name" in local_dep and global_dep['Name'] == local_dep['Name']) ):
+                                if "SdkInstall" in global_dep:
+                                    deps_to_install.append(global_dep)
+                                else:
+                                    print("No SDK installation instruction found for: {}, {}".format(dependency, url))
+                                    failure = True
+                            else: 
+                                continue
+        elif args.verbose:
+            failure = True
+            print("Is not a file: {}".format(dependency_file))
+    # Install from command line list
+    else:
+        dependencies = args.install
 
-		if args.verbose:
-			print("Loading dependencies from command-line {}".format(dependencies))
-		for dependency in dependencies:
-			deps_candidates = []
-			# Find dependency to install
-	 		for global_dep in global_deps_dict:
-				name = ""
-				url = ""
-				if "Url" in global_dep:
-					url = global_dep["Url"]
-				else: 
-					continue
+        if args.verbose:
+            print("Loading dependencies from command-line {}".format(dependencies))
+        for dependency in dependencies:
+            deps_candidates = []
+            # Find dependency to install
+            for global_dep in global_deps_dict:
+                name = ""
+                url = ""
+                if "Url" in global_dep:
+                    url = global_dep["Url"]
+                else: 
+                    continue
 
-				archive_name = url.rsplit('/', 1)[-1]
+                archive_name = url.rsplit('/', 1)[-1]
 
-				if "Name" in global_dep:
-					name = global_dep["Name"]
-				if dependency == name or dependency.lower() == url or dependency.lower() == archive_name:
-					if "SdkInstall" in global_dep:
-						deps_candidates.append(global_dep)
-					else:
-						print("No SDK installation instruction found for: {}, {}".format(dependency, url))
-						failure = True
+                if "Name" in global_dep:
+                    name = global_dep["Name"]
+                if dependency == name or dependency.lower() == url or dependency.lower() == archive_name:
+                    if "SdkInstall" in global_dep:
+                        deps_candidates.append(global_dep)
+                    else:
+                        print("No SDK installation instruction found for: {}, {}".format(dependency, url))
+                        failure = True
 
-			# Make sure we have only matched one dependency
-			if len(deps_candidates) == 0:
-				failure = True
-				if not args.silent :
-					print("Found no dependency for \"{}\"".format(dependency))
-			elif len(deps_candidates) > 1:
-				failure = True
-				print("Found {} matching dependencies for \"{}\":".format(len(deps_candidates), dependency))
-				for too_many_deps in deps_candidates :
-					print("   {}".format(too_many_deps['Url']))
-				print("Please install using entire URL.")
-			else:
-				deps_to_install.append(deps_candidates[0])
+            # Make sure we have only matched one dependency
+            if len(deps_candidates) == 0:
+                failure = True
+                if not args.silent :
+                    print("Found no dependency for \"{}\"".format(dependency))
+            elif len(deps_candidates) > 1:
+                failure = True
+                print("Found {} matching dependencies for \"{}\":".format(len(deps_candidates), dependency))
+                for too_many_deps in deps_candidates :
+                    print("   {}".format(too_many_deps['Url']))
+                print("Please install using entire URL.")
+            else:
+                deps_to_install.append(deps_candidates[0])
 
-	if failure: 
-		print("One or more errors occured, aborting")
-		sys.exit(10)
-	else:
-		for dep_to_install in deps_to_install:
-			url = dep_to_install['Url']
-			archive_name = url.rsplit('/', 1)[-1]
-			if "SdkInstall" in dep_to_install:
-				sdk_install = dep_to_install['SdkInstall']
-			else : 
-				# This should be impossible, check is done above ^
-				print("No SDK install instruction for {}".format(url))
-				sys.exit(10)
+    if failure: 
+        print("One or more errors occured, aborting")
+        sys.exit(10)
+    else:
+        for dep_to_install in deps_to_install:
+            url = dep_to_install['Url']
+            archive_name = url.rsplit('/', 1)[-1]
+            archive_type = dep_to_install['ArchiveType'] if 'ArchiveType' in dep_to_install else archive_name[-3:]
 
-			# Download archive and extract	
-			if args.test:
-				tempdir = "tmp"
-			else:
-				tempdir = tempfile.mkdtemp()
-	
-			unpack_cmd = UNPACK_CMD['lha'].format(tempdir=tempdir, archive=tempdir+"/"+archive_name)
-			chmod_cmd = CHMOD_CMD.format(tempdir=tempdir)
+            if "SdkInstall" in dep_to_install:
+                sdk_install = dep_to_install['SdkInstall']
+            else : 
+                # This should be impossible, check is done above ^
+                print("No SDK install instruction for {}".format(url))
+                sys.exit(10)
 
-			if args.test:
-				print("Should download {} to {}/{}".format(url,tempdir,archive_name))
-				print("call: "+unpack_cmd)
-				print("call: "+chmod_cmd)
-			else:
-				if args.verbose:
-					print("Downloading {} to {}/{}".format(url,tempdir,archive_name))
-				urllib.urlretrieve(url, tempdir+"/"+archive_name)
-				if args.verbose:
-					print("call: "+unpack_cmd)
-				call(unpack_cmd, shell=True)
-				if args.verbose:
-					print("call: "+chmod_cmd)
-				call(chmod_cmd, shell=True)
+            if not archive_type in UNPACK_CMD:
+                print("No handler for archive type {} (filename: {}, url: {})".format(archive_type, archive_name, url))
+                sys.exit(10)
+                
 
-			for instruction in sdk_install:
-				copy_cmd = COPY_COMMAND.format(install_from=tempdir+"/"+instruction['From'], install_to=SDK_LOCATION+instruction['To'])
-				if args.test:
-					print("call: "+copy_cmd)
-				else:
-					if args.verbose:
-						print("call: "+copy_cmd)
-					call(copy_cmd, shell=True)
+            # Download archive and extract    
+            if args.test:
+                tempdir = "tmp"
+            else:
+                tempdir = tempfile.mkdtemp()
+    
+            unpack_cmd = UNPACK_CMD[archive_type].format(tempdir=tempdir, archive=tempdir+"/"+archive_name)
+            chmod_cmd = CHMOD_CMD.format(tempdir=tempdir)
+            
+            if args.test:
+                print("Should download {} to {}/{}".format(url,tempdir,archive_name))
+                print("call: "+unpack_cmd)
+                print("call: "+chmod_cmd)
+            else:
+                if args.verbose:
+                    print("Downloading {} to {}/{}".format(url,tempdir,archive_name))
 
-			if not args.silent:
-				print("Installed "+archive_name+" successfully.")
+                download_file(url, tempdir+"/"+archive_name)
+                # r = requests.get(url, allow_redirects=True)
+                # open(tempdir+"/"+archive_name, 'wb').write(r.content)
 
-			if not dep_to_install in local_dependency_file_content:
-				local_dependency_file_content.append({'Url':dep_to_install['Url']})
-			elif args.verbose and args.generate_dep_file:
-				print("Dependecy {} already in file, not adding".format(dep_to_install['Url']))
-	if not args.silent:
-		print("Installed {} dependencies".format(len(deps_to_install)))
+                # urllib.urlretrieve(url, tempdir+"/"+archive_name)
+
+                if args.verbose:
+                    print("call: "+unpack_cmd)
+                call(unpack_cmd, shell=True)
+                if args.verbose:
+                    print("call: "+chmod_cmd)
+                call(chmod_cmd, shell=True)
+
+            for instruction in sdk_install:
+                copy_cmd = COPY_COMMAND.format(install_from=tempdir+"/"+instruction['From'], install_to=SDK_LOCATION+instruction['To'])
+                if args.test:
+                    print("call: "+copy_cmd)
+                else:
+                    if args.verbose:
+                        print("call: "+copy_cmd)
+                    call(copy_cmd, shell=True)
+
+            if not args.silent:
+                print("Installed "+archive_name+" successfully.")
+
+            if not dep_to_install in local_dependency_file_content:
+                local_dependency_file_content.append({'Url':dep_to_install['Url']})
+            elif args.verbose and args.generate_dep_file:
+                print("Dependecy {} already in file, not adding".format(dep_to_install['Url']))
+    if not args.silent:
+        print("Installed {} dependencies".format(len(deps_to_install)))
 if args.generate_dep_file:
-	if args.verbose:
-		print("Adding dependencies to {}".format(dependency_file))
-	with open(dependency_file, 'w') as outfile:
-		json.dump(local_dependency_file_content, outfile)
+    if args.verbose:
+        print("Adding dependencies to {}".format(dependency_file))
+    with open(dependency_file, 'w') as outfile:
+        json.dump(local_dependency_file_content, outfile)
 
 
 sys.exit(0)
