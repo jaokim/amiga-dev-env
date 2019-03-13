@@ -15,13 +15,9 @@
 #   }
 # ]
 # The JSON file can be expanded with SdkInstall instructions as below.
-#
-# $ver 1.4 (2019-02-25)
-# 
-# Author: Joakim Nordstrom
-#
 
-
+VERSION = "$ver 1.5 (2019-03-05)"
+AUTHOR = "Joakim Nordstrom"
 
 import sys
 import json
@@ -68,10 +64,15 @@ parser.add_argument('-s', '--search', help="search for a dependency")
 parser.add_argument('--update', help='download a new global dependencies file', action="store_true")
 parser.add_argument('--test', help='only test what would happen', action="store_true")
 parser.add_argument('--verbose', help='be verbose', action="store_true")
+parser.add_argument('--version', help='show version', action="store_true")
 parser.add_argument('--silent', help='be silent', action="store_true")
 
 args = parser.parse_args()
 
+if args.version:
+    print("Version: {}".format(VERSION))
+    print("Author:  {}".format(AUTHOR))
+    sys.exit(0)
 
 if args.verbose:
     COPY_COMMAND = "cp --verbose -rp {install_from} {install_to}";
