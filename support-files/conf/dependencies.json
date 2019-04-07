@@ -178,5 +178,23 @@
             { "From": "SDK/local/*",    "To": "local/"}
         ]
         
+    },
+    {
+	"Name": "libfontconfig-2.13.1",
+	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libfontconfig-2.13.1.tar",
+        "ArchiveType" : "tar",
+        "SdkInstall": [
+            { "From": "SDK/local/*",    "To": "local/"}
+        ]
+        
+    },
+    {
+	"Name": "libuuid",
+	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libuuid.tar",
+        "ArchiveType" : "tar",
+        "SdkInstall": [
+            { "From": "SDK/local/*",    "To": "local/"}
+        ]
+        
     }
 ]
