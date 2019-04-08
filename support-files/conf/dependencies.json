@@ -171,8 +171,8 @@
         ]
     },
     {
-	"Name": "libxslt-1.1.30",
-	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libxslt-1.1.30.tar",
+    	"Name": "libxslt-1.1.30",
+    	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libxslt-1.1.30.tar",
         "ArchiveType" : "tar",
         "SdkInstall": [
             { "From": "SDK/local/*",    "To": "local/"}
@@ -180,8 +180,8 @@
         
     },
     {
-	"Name": "libfontconfig-2.13.1",
-	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libfontconfig-2.13.1.tar",
+    	"Name": "libfontconfig-2.13.1",
+    	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libfontconfig-2.13.1.tar",
         "ArchiveType" : "tar",
         "SdkInstall": [
             { "From": "SDK/local/*",    "To": "local/"}
@@ -189,12 +189,30 @@
         
     },
     {
-	"Name": "libuuid",
-	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libuuid.tar",
+    	"Name": "cairolib-1.14.10-withfcfont",
+    	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/cairolib-1.14.10-withfcfont.tar",
+        "ArchiveType" : "tar",
+        "SdkInstall": [
+            {"From": "cairo_lib/cairo_lib-1.14.10/SDK/local/*", "To": "local/"}
+        ]
+        
+    },
+    {
+    	"Name": "libuuid",
+    	"Url":"http://downloads.sourceforge.net/project/odyssey-os4-dependencies/libuuid.tar",
         "ArchiveType" : "tar",
         "SdkInstall": [
             { "From": "SDK/local/*",    "To": "local/"}
         ]
         
+    },
+    {
+       "Name" : "asyncio",
+       "Url" : "http://os4depot.net/share/utility/misc/asyncio.lha",
+       "ArchiveType" : "tar",
+        "SdkInstall": [
+            { "From": "AsyncIO/include/*",    "To": "include/include_h/"}
+        ]
+    
     }
 ]
