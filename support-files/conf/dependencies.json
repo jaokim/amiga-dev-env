@@ -209,7 +209,7 @@
     {
        "Name" : "asyncio",
        "Url" : "http://os4depot.net/share/utility/misc/asyncio.lha",
-       "ArchiveType" : "tar",
+       "ArchiveType" : "lha",
         "SdkInstall": [
             { "From": "AsyncIO/include/*",    "To": "include/include_h/"}
         ]
