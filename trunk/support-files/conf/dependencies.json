@@ -214,5 +214,15 @@
             { "From": "AsyncIO/include/*",    "To": "include/include_h/"}
         ]
     
+    },
+    {
+       "Name" : "CGraphX-DevKit",
+       "Url" : "http://aminet.net/dev/misc/CGraphX-DevKit.lha",
+       "ArchiveType" : "lha",
+        "SdkInstall": [
+            { "From": "CGraphX/C/Include/cybergraphx",    "To": "include/include_h/"}
+        ]
+    
     }
+    
 ]
