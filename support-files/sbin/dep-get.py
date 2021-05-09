@@ -16,7 +16,7 @@
 # ]
 # The JSON file can be expanded with SdkInstall instructions as below.
 
-VERSION = "$ver 1.5 (2019-03-05)"
+VERSION = "$ver 1.6 (2021-05-09)"
 AUTHOR = "Joakim Nordstrom"
 
 import sys
@@ -221,7 +221,7 @@ if args.install is not None:
                     # If we find the URL and isntall instructions in the local file,
                     # we can download and install, otherwise, we have to find it in global
                     if "Url" in local_dep and "SdkInstall" in local_dep:
-                        deps_to_install.append(dep)
+                        deps_to_install.append(local_dep)
                     else:
                         for global_dep in global_deps_dict:
                             if ( ("Url" in global_dep and "Url" in local_dep and global_dep['Url'] == local_dep['Url']) or 
